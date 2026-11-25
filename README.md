@@ -33,6 +33,24 @@ Gateway API berbasis **Laravel 13** untuk agregasi, caching lokal, dan sinkronis
 - `GET /api/sipongi/provinsi` — Daftar referensi provinsi Sipongi
 - `GET /api/sipongi/boundaries_provinsi` — Batas administratif provinsi Indonesia (GeoJSON)
 
+### 3. Autentikasi, Laporan, Donasi & Notifikasi
+- `POST /api/auth/register` — Registrasi pengguna baru
+- `POST /api/auth/login` — Login pengguna (mengembalikan token Sanctum)
+- `POST /api/auth/logout` — Logout (`auth:sanctum`)
+- `PUT /api/user/profile` — Update profil pengguna (`auth:sanctum`)
+- `GET /api/reports` — Daftar laporan bencana
+- `GET /api/reports/my` — Riwayat laporan milik user (`auth:sanctum`)
+- `GET /api/reports/{id}` — Detail laporan
+- `POST /api/reports` — Kirim laporan bencana baru (`auth:sanctum`)
+- `GET /api/campaigns` — Daftar kampanye donasi
+- `GET /api/campaigns/{id}` — Detail kampanye donasi
+- `POST /api/campaigns` — Buat kampanye donasi (`auth:sanctum`)
+- `POST /api/donations` — Kirim transaksi donasi (`auth:sanctum`)
+- `GET /api/donations/my` — Riwayat donasi milik user (`auth:sanctum`)
+- `GET /api/notifications` — Daftar notifikasi & peringatan dini (`auth:sanctum`)
+- `GET /api/notifications/{id}` — Detail notifikasi (`auth:sanctum`)
+- `PATCH /api/notifications/{id}/read` — Tandai notifikasi sudah dibaca (`auth:sanctum`)
+
 ## Menjalankan Sync
 Manual lewat Artisan atau jalankan `sync-all.cmd`:
 ```sh

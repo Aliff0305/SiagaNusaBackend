@@ -136,6 +136,40 @@
             </div>
         </section>
 
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-white">Endpoint Aplikasi (Auth, Laporan, Donasi &amp; Notifikasi)</h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-800/70 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3">Method</th>
+                            <th class="px-4 py-3">Endpoint</th>
+                            <th class="px-4 py-3">Auth</th>
+                            <th class="px-4 py-3">Deskripsi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/auth/register</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Registrasi pengguna baru (<code class="text-slate-300">name, email, password, phone?</code>)</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/auth/login</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Login pengguna (<code class="text-slate-300">email, password</code>)</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/auth/logout</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Logout &amp; hapus token aktif</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-amber-400">PUT</td><td class="px-4 py-3 font-mono text-slate-200">/api/user/profile</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Update profil (<code class="text-slate-300">name, phone, avatar?</code>)</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/reports</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Daftar laporan bencana (opsional: <code class="text-slate-300">?status=&amp;type=</code>)</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/reports/my</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Riwayat laporan milik user</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/reports/{id}</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Detail satu laporan</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/reports</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Kirim laporan bencana baru</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/campaigns</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Daftar kampanye donasi</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/campaigns/{id}</td><td class="px-4 py-3 text-slate-400">Public</td><td class="px-4 py-3 text-slate-400">Detail kampanye donasi</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/campaigns</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Buat kampanye donasi baru</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-sky-400">POST</td><td class="px-4 py-3 font-mono text-slate-200">/api/donations</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Kirim transaksi donasi</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/donations/my</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Riwayat donasi milik user</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/notifications</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Daftar notifikasi user &amp; peringatan dini</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-emerald-400">GET</td><td class="px-4 py-3 font-mono text-slate-200">/api/notifications/{id}</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Detail notifikasi</td></tr>
+                        <tr><td class="px-4 py-3 font-mono text-xs text-purple-400">PATCH</td><td class="px-4 py-3 font-mono text-slate-200">/api/notifications/{id}/read</td><td class="px-4 py-3 text-amber-400">Sanctum</td><td class="px-4 py-3 text-slate-400">Tandai notifikasi sudah dibaca</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section class="space-y-3">
             <h2 class="text-xl font-semibold text-white">Kode Status HTTP</h2>
             <ul class="list-disc list-inside text-sm text-slate-400 space-y-1">

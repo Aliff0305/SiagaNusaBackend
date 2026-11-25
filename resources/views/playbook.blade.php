@@ -28,29 +28,56 @@
             <label for="endpointSelect" class="block text-sm font-medium text-slate-300">Pilih Endpoint</label>
             <div class="flex flex-col sm:flex-row gap-3">
                 <select id="endpointSelect" class="flex-1 rounded-lg bg-slate-950 border border-slate-700 px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
-                    <optgroup label="Kategori">
-                        <option value="/api/bmkg">GET /api/bmkg</option>
-                        <option value="/api/bmkg/realtime">GET /api/bmkg/realtime</option>
-                        <option value="/api/bmkg/catalog">GET /api/bmkg/catalog</option>
-                        <option value="/api/bmkg/sensors">GET /api/bmkg/sensors</option>
-                        <option value="/api/bmkg/spatial">GET /api/bmkg/spatial</option>
-                        <option value="/api/bmkg/events/mmi">GET /api/bmkg/events/mmi</option>
+                    <optgroup label="BMKG Kategori">
+                        <option value="GET /api/bmkg">GET /api/bmkg</option>
+                        <option value="GET /api/bmkg/realtime">GET /api/bmkg/realtime</option>
+                        <option value="GET /api/bmkg/catalog">GET /api/bmkg/catalog</option>
+                        <option value="GET /api/bmkg/sensors">GET /api/bmkg/sensors</option>
+                        <option value="GET /api/bmkg/spatial">GET /api/bmkg/spatial</option>
+                        <option value="GET /api/bmkg/events/mmi">GET /api/bmkg/events/mmi</option>
                     </optgroup>
                     <optgroup label="BMKG Feed Spesifik">
                         @foreach($feeds as $key => $feed)
-                            <option value="/api/bmkg/{{ $key }}">GET /api/bmkg/{{ $key }} ({{ $feed['category'] }})</option>
+                            <option value="GET /api/bmkg/{{ $key }}">GET /api/bmkg/{{ $key }} ({{ $feed['category'] }})</option>
                         @endforeach
                     </optgroup>
                     <optgroup label="Sipongi (Kebakaran &amp; Hotspot)">
-                        <option value="/api/sipongi">GET /api/sipongi</option>
+                        <option value="GET /api/sipongi">GET /api/sipongi</option>
                         @foreach($sipongiFeeds as $key => $feed)
-                            <option value="/api/sipongi/{{ $key }}">GET /api/sipongi/{{ $key }} ({{ $feed['category'] }})</option>
+                            <option value="GET /api/sipongi/{{ $key }}">GET /api/sipongi/{{ $key }} ({{ $feed['category'] }})</option>
                         @endforeach
+                    </optgroup>
+                    <optgroup label="Autentikasi">
+                        <option value="POST /api/auth/register">POST /api/auth/register</option>
+                        <option value="POST /api/auth/login">POST /api/auth/login</option>
+                        <option value="POST /api/auth/logout">POST /api/auth/logout</option>
+                        <option value="PUT /api/user/profile">PUT /api/user/profile</option>
+                    </optgroup>
+                    <optgroup label="Laporan, Donasi &amp; Notifikasi">
+                        <option value="GET /api/reports">GET /api/reports</option>
+                        <option value="GET /api/reports/my">GET /api/reports/my</option>
+                        <option value="POST /api/reports">POST /api/reports</option>
+                        <option value="GET /api/campaigns">GET /api/campaigns</option>
+                        <option value="POST /api/campaigns">POST /api/campaigns</option>
+                        <option value="POST /api/donations">POST /api/donations</option>
+                        <option value="GET /api/donations/my">GET /api/donations/my</option>
+                        <option value="GET /api/notifications">GET /api/notifications</option>
                     </optgroup>
                 </select>
                 <button id="sendBtn" type="button" class="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm transition cursor-pointer">
                     Kirim Request
                 </button>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 pt-2">
+                <div>
+                    <label for="bearerToken" class="block text-xs font-medium text-slate-400 mb-1">Bearer Token (opsional, untuk endpoint Sanctum)</label>
+                    <input id="bearerToken" type="text" placeholder="1|xxxxxxxxxxxxxxxxxxxx" class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label for="jsonBody" class="block text-xs font-medium text-slate-400 mb-1">JSON Body (untuk POST / PUT / PATCH)</label>
+                    <textarea id="jsonBody" rows="3" placeholder='{"email": "user@example.com", "password": "password123"}' class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
             </div>
         </div>
 
@@ -68,6 +95,8 @@
 
     <script>
         const select = document.getElementById('endpointSelect');
+        const bearerToken = document.getElementById('bearerToken');
+        const jsonBody = document.getElementById('jsonBody');
         const sendBtn = document.getElementById('sendBtn');
         const requestUrl = document.getElementById('requestUrl');
         const statusBadge = document.getElementById('statusBadge');
@@ -75,15 +104,27 @@
         const responseOutput = document.getElementById('responseOutput');
 
         sendBtn.addEventListener('click', async () => {
-            const url = select.value;
-            requestUrl.textContent = 'GET ' + url;
+            const [method, url] = select.value.split(' ');
+            requestUrl.textContent = `${method} ${url}`;
             statusBadge.textContent = 'Status: Loading...';
             latencyBadge.textContent = 'Latency: -';
             responseOutput.textContent = 'Mengambil data...';
 
+            const headers = { 'Accept': 'application/json' };
+            const token = bearerToken.value.trim();
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const options = { method, headers };
+            if (['POST', 'PUT', 'PATCH'].includes(method) && jsonBody.value.trim()) {
+                headers['Content-Type'] = 'application/json';
+                options.body = jsonBody.value.trim();
+            }
+
             const start = performance.now();
             try {
-                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                const res = await fetch(url, options);
                 const elapsed = Math.round(performance.now() - start);
                 statusBadge.textContent = `Status: ${res.status} ${res.statusText}`;
                 latencyBadge.textContent = `Latency: ${elapsed} ms`;
