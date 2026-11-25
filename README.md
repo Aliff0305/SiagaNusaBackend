@@ -12,15 +12,26 @@ Gateway API berbasis **Laravel 13** untuk agregasi, caching lokal, dan sinkronis
   - `/playbook` — Uji coba API interaktif langsung dari browser
 
 ## Endpoint API
-- `GET /api/bmkg` — Daftar semua feed BMKG & status sync
-- `GET /api/bmkg/realtime` — Feed gempa real-time
-- `GET /api/bmkg/catalog` — Histori & katalog gempa
-- `GET /api/bmkg/sensors` — Sensor seismik nasional & global
-- `GET /api/bmkg/spatial` — Data geospasial patahan aktif
-- `GET /api/bmkg/events/mmi` — Daftar stasiun & intensitas MMI
-- `GET /api/bmkg/{feed}` — Feed BMKG spesifik
-- `GET /api/sipongi` — Daftar semua feed Sipongi & status sync
-- `GET /api/sipongi/{feed}` — Feed Sipongi spesifik
+
+### 1. BMKG & InaTEWS (Gempa & Tsunami)
+- `GET /api/bmkg` — Daftar semua feed BMKG & status sync (opsional: `?category=realtime|catalog|sensor|spatial|event_detail`)
+- `GET /api/bmkg/realtime` — Gabungan feed gempa real-time (`datagempa`, `live30event`, `last30event`, `last30feltevent`, `last30tsunamievent`, `3mgempaql`)
+- `GET /api/bmkg/catalog` — Histori & katalog gempa (`histori`, `katalog_gempa`)
+- `GET /api/bmkg/sensors` — Sensor seismik nasional & global (`sensor_seismic`, `sensor_global`)
+- `GET /api/bmkg/spatial` — Data geospasial patahan aktif (`merged_fault`)
+- `GET /api/bmkg/events/mmi` — Daftar stasiun & intensitas MMI (`stationlist_mmi`)
+- `GET /api/bmkg/{feed}` — Feed BMKG spesifik berdasarkan key
+
+### 2. Sipongi (Kebakaran Hutan & Hotspot)
+- `GET /api/sipongi` — Daftar semua feed Sipongi & status sync (opsional: `?category=hotspot|statistics|operations|environment|reference|spatial`)
+- `GET /api/sipongi/hotspot` — Titik panas (hotspot) Indonesia 24 jam terakhir (GeoJSON)
+- `GET /api/sipongi/summary_hotspot` — Ringkasan jumlah hotspot per satelit & confidence level
+- `GET /api/sipongi/sebaran` — Daftar tabular sebaran titik panas 24 jam terakhir
+- `GET /api/sipongi/summary_kebakaran` — Ringkasan statistik luas kebakaran & penanganan tahunan
+- `GET /api/sipongi/pemadaman` — Data operasi pemadaman Manggala Agni (GeoJSON)
+- `GET /api/sipongi/aqms` — Data stasiun kualitas udara / IKU (GeoJSON)
+- `GET /api/sipongi/provinsi` — Daftar referensi provinsi Sipongi
+- `GET /api/sipongi/boundaries_provinsi` — Batas administratif provinsi Indonesia (GeoJSON)
 
 ## Menjalankan Sync
 Manual lewat Artisan atau jalankan `sync-all.cmd`:
